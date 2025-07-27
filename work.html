@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            background-image: 
+                radial-gradient(at 20% 20%, hsla(212, 90%, 50%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 80% 20%, hsla(280, 90%, 50%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 20% 80%, hsla(320, 90%, 50%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 80% 80%, hsla(180, 90%, 50%, 0.15) 0px, transparent 50%);
+        }
+
+        /* Custom Tailwind primary colors */
+        .tailwind-config {
+            color: #7c3aed; /* primary-600 */
+            color: #a78bfa; /* primary-400 */
+            color: #c4b5fd; /* primary-300 */
+            color: #ddd6fe; /* primary-200 */
+            color: #ede9fe; /* primary-100 */
+            background-color: #7c3aed; /* bg-primary-600 */
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            opacity: 0;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+        
+        .input-group {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .input-group-1 { animation: slideInUp 0.4s ease-out 0.2s forwards; }
+        .input-group-2 { animation: slideInUp 0.4s ease-out 0.3s forwards; }
+        .button-group { animation: slideInUp 0.4s ease-out 0.4s forwards; }
+        
+        .icon-container {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .icon-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.5);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: transform 0.6s ease;
+        }
+        
+        .btn-primary:hover::before {
+            transform: translateX(200%);
+        }
+        
+        .btn-secondary {
+            transition: transform 0.2s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            border-color: #7c3aed;
+            color: #a78bfa;
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+        }
+        
+        .btn-secondary:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes arrowMove {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .btn-primary:hover .arrow-animation {
+            animation: arrowMove 1s infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-white px-4 pt-24 sm:pt-4">
+
+    <header class="absolute top-0 left-0 w-full p-4 sm:p-6">
+        <div class="container mx-auto px-4 md:px-6">
+             <a href="https://sankalp.spectov.in/#home" class="inline-flex items-center space-x-3 transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95">
+                <img src="logo.png" alt="Sankalp Logo" class="h-12 w-12"/>
+                <span class="text-xl font-bold text-white">
+                  Sankalp Training Program
+                </span>
+            </a>
+        </div>
+    </header>
+
+    <div class="w-full max-w-md relative z-10">
+        <!-- Login Type Switcher -->
+        <div class="flex justify-center mb-4 bg-gray-800/60 p-1 rounded-full backdrop-blur-sm animate-slide-in" style="animation-delay: 0s;">
+            <button onclick="switchType('student')" id="btn-student" class="login-type-btn flex-1 text-center px-4 py-2 rounded-full text-sm font-medium transition-all bg-violet-600 text-white">Student</button>
+            <button onclick="switchType('admin')" id="btn-admin" class="login-type-btn flex-1 text-center px-4 py-2 rounded-full text-sm font-medium transition-all text-gray-300">Admin</button>
+            <button onclick="switchType('employee')" id="btn-employee" class="login-type-btn flex-1 text-center px-4 py-2 rounded-full text-sm font-medium transition-all text-gray-300">Employee</button>
+        </div>
+
+        <!-- Form Container -->
+        <form id="loginForm" class="form-container bg-black/80 backdrop-blur-lg border border-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl shadow-violet-500/10">
+            <!-- Form Header -->
+            <div class="flex items-center justify-center mb-8 animate-slide-in" style="animation-delay: 0.1s;">
+                <div class="bg-violet-900/30 p-3 rounded-full icon-container">
+                    <i data-lucide="log-in" class="w-6 h-6 text-violet-300"></i>
+                </div>
+                <h2 class="ml-4 text-2xl font-bold text-white">
+                    <span id="formTypeLabel" class="text-violet-400">Student </span>
+                    <span class="text-white">Login</span>
+                </h2>
+            </div>
+
+            <!-- Info Message -->
+             <p id="infoMessage" class='text-center bg-blue-900/20 border border-blue-800 text-blue-300 px-4 py-3 rounded-lg mb-5 animate-slide-in' style="animation-delay: 0.15s;">Try 2 to 3 times if signin/signup doesn't work once</p>
+
+            <!-- Error Message Placeholder -->
+            <div id="formError" class="hidden mb-6 bg-red-900/20 border border-red-800 text-red-400 px-4 py-3 rounded-lg animate-slide-in">
+                Invalid email or password
+            </div>
+
+            <!-- Email Input -->
+            <div class="mb-5 input-group input-group-1">
+                <label class="block text-gray-300 text-sm font-medium mb-2" for="email">Email</label>
+                <input class="w-full bg-gray-900/50 border border-gray-700 text-gray-200 py-3 px-4 rounded-lg focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors" id="email" type="email" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-6 input-group input-group-2">
+                <label class="block text-gray-300 text-sm font-medium mb-2" for="password">Password</label>
+                <div class="relative">
+                    <input class="w-full bg-gray-900/50 border border-gray-700 text-gray-200 py-3 px-4 pr-12 rounded-lg focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors" id="password" type="password" placeholder="Enter your password" required>
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors">
+                        <i id="eye-icon" data-lucide="eye" class="w-5 h-5"></i>
+                        <i id="eye-off-icon" data-lucide="eye-off" class="w-5 h-5 hidden"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div id="forgotPasswordContainer" class="flex justify-end mb-4 opacity-0" style="animation: slideInUp 0.4s ease-out 0.3s forwards;">
+                <button type="button" class="text-violet-400 hover:text-violet-300 text-sm transition-colors">
+                    Forgot Password?
+                </button>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-between mt-8 opacity-0 input-group button-group">
+                <button class="w-full sm:w-auto bg-violet-600 text-white px-6 py-3 rounded-full font-semibold flex items-center justify-center gap-2 btn-primary" type="submit">
+                    <span id="submit-text">Sign In</span>
+                    <div class="arrow-animation">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </button>
+
+                <button id="registerButton" type="button" class="w-full sm:w-auto mt-4 sm:mt-0 border-2 border-gray-700 text-gray-300 px-6 py-3 rounded-full font-medium btn-secondary">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const passwordInput = document.getElementById('password');
+        const togglePasswordButton = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eye-icon');
+        const eyeOffIcon = document.getElementById('eye-off-icon');
+        const form = document.getElementById('loginForm');
+        const formError = document.getElementById('formError');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const submitText = document.getElementById('submit-text');
+
+        // --- Password Visibility Toggle ---
+        togglePasswordButton.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            eyeIcon.classList.toggle('hidden', isPassword);
+            eyeOffIcon.classList.toggle('hidden', !isPassword);
+        });
+
+        // --- Form Submission Simulation ---
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Reset state
+            formError.classList.add('hidden');
+            submitButton.disabled = true;
+            submitText.textContent = 'Signing In...';
+
+            // Simulate API call
+            setTimeout(() => {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                // Simulate a failed login
+                if (password !== 'password123') {
+                     formError.textContent = 'Invalid email or password. Please try again.';
+                     formError.classList.remove('hidden');
+                } else {
+                    // Simulate a successful login
+                    alert('Login successful!');
+                    form.reset(); // Clear form
+                }
+                
+                submitButton.disabled = false;
+                submitText.textContent = 'Sign In';
+
+            }, 1500);
+        });
+
+        // --- Login Type Switcher Logic ---
+        const formTypeLabel = document.getElementById('formTypeLabel');
+        const registerButton = document.getElementById('registerButton');
+        const forgotPasswordContainer = document.getElementById('forgotPasswordContainer');
+        const loginTypeButtons = document.querySelectorAll('.login-type-btn');
+
+        function switchType(type) {
+            // Update button styles
+            loginTypeButtons.forEach(btn => {
+                btn.classList.remove('bg-violet-600', 'text-white');
+                btn.classList.add('text-gray-300');
+            });
+            document.getElementById(`btn-${type}`).classList.add('bg-violet-600', 'text-white');
+            document.getElementById(`btn-${type}`).classList.remove('text-gray-300');
+            
+            // Update form label
+            const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+            formTypeLabel.textContent = typeLabel + ' ';
+
+            // Show/hide register and forgot password buttons
+            if (type === 'admin') {
+                registerButton.classList.add('hidden');
+                forgotPasswordContainer.classList.add('hidden');
+            } else {
+                registerButton.classList.remove('hidden');
+                forgotPasswordContainer.classList.remove('hidden');
+            }
+
+            // Reset form state on switch
+            form.reset();
+            formError.classList.add('hidden');
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('hidden');
+            eyeOffIcon.classList.add('hidden');
+        }
+        
+        // Initialize with student view
+        switchType('student');
+
+    </script>
+</body>
+</html>
